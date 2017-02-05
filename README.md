@@ -23,3 +23,5 @@ To use these scripts without modifications, you should use this structure of dir
         |- mse
         |- scripts
 
+To get "binutils" and a FPC stable version, take a look on this [link](http://wiki.freepascal.org/Installing_Lazarus#Compiling.2Finstalling_FPC_and_Lazarus_from_Sources_of_SVN_.28Win32.29), made by me and improved by community.
+
