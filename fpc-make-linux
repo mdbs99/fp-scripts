@@ -1,0 +1,176 @@
+#!/bin/bash
+#
+# Makefpc 
+#
+# Some definitions. Setup as needed.
+SVN=svn
+MAKE=make
+#
+#
+#
+function usage {
+  echo Usage: $0 [options]
+  echo 'Where options is one or more of the following:'
+  echo ' -c              Make cycle (default is compile RTL).'
+  echo ' -d dir          FPC top level directory (default is current).'
+  echo ' -f              Compile Free Vision.'
+  echo ' -h              Usage (this text).'
+  echo ' -i              Compile IDE'
+  echo ' -I              Install (requires root password to be entered)'
+  echo ' -l logfile      Use logfile for logging'
+  echo ' -p compiler     Use compiler binary'
+  echo ' -t              Compile tools (utils directory)'
+  echo ' -u              Specify project name.'
+  echo 
+}
+#
+# Check result and output message.
+#
+function checkresult {
+  if [ $1 != 0 ]; then
+    echo "$2 failed with exit status $1. Quitting"
+    return 1
+  fi
+  echo "$2: Command completed OK."
+  return 0
+}
+#
+# Parse options.
+#
+while test $# != 0 
+do	
+  f=$1
+  case $f in
+    '-c') DOCYCLE=YES;;
+    '-d') shift
+          FPCDIR=$1;;
+    '-f') DOFVISION=YES;;
+    '-h') usage
+          exit;; 
+    '-i') DOIDE=YES
+          DOFVISION=YES;;
+    '-I') DOINSTALL=YES;;
+    '-l') shift
+          LOGFILE=$1;;
+    '-p') shift
+          PP=$1;;
+    '-t') DOTOOLS=YES;;
+    '-u') DOSVN=YES;;
+    '-o') shift
+          MAKEOPT="$1";;
+  esac
+  shift
+done
+#
+#
+#
+if [ ! -z "$FPCDIR" ]; then
+  cd $FPCDIR
+  if [ $? != 0 ]; then
+    echo Failed to change to directory $FPCDIR.
+    exit 1
+  fi
+else
+  FPCDIR=`pwd`
+fi
+if [ -z "$LOGFILE" ]; then
+  LOGFILE=`date +%Y-%m-%d-%H:%M:%S`.log
+fi
+if [ ! -z "$PP" ]; then
+  MAKEPP="PP=$PP"
+fi
+#
+# Start logging from here
+#
+(
+#
+# Update from cvs if needed.
+#
+if [ "$DOSVN" = "YES" ]; then
+  # No error checking on those. SVN exits with error 1 in strange cases.
+  $SVN update rtl 
+  $SVN update packages
+  $SVN update fcl
+  if [ "$DOCYCLE" = "YES" ]; then
+    $SVN update compiler
+  fi
+  if [ "$DOTOOLS" = "YES" ]; then
+    $SVN update utils
+  fi
+  if [ "$DOFVISION" = "YES" ]; then
+    $SVN update fv
+  fi
+  if [ "$DOIDE" = "YES" ]; then
+    $SVN update ide
+  fi
+fi
+#
+# Start compiling
+#
+# RTL/Compiler
+#
+if [ "$DOCYCLE" = "YES" ]; then
+  $MAKE  $MAKEPP -C compiler cycle 
+  checkresult $? "Make cycle" || exit 1
+  MAKEPP="PP=$FPCDIR/compiler/ppc3"
+else
+  $MAKE $MAKEOPT $MAKEPP -C rtl clean && $MAKE $MAKEOPT $MAKEPP -C rtl all 
+  checkresult $? "RTL Compilation" || exit 1
+fi
+#
+# Base Packages
+#
+$MAKE $MAKEOPT $MAKEPP -C packages clean
+checkresult $? "Clean packages" || exit 1
+$MAKE $MAKEOPT $MAKEPP -C packages all
+checkresult $? "Packages compilation" || exit 1
+#
+# FVISION
+#
+if [ "$DOFVISION" = 'YES' ]; then
+  $MAKE $MAKEOPT $MAKEPP -C fv clean
+  checkresult $? "Clean Free vision" || exit 1
+  $MAKE $MAKEOPT $MAKEPP -C fv all
+  checkresult $? "Free Vision compilation" || exit 1
+  INSTALLFVISION="&& make $MAKEPP -C utils install"
+fi
+#
+# Utils
+#
+if [ "$DOTOOLS" = 'YES' ]; then
+  $MAKE $MAKEOPT $MAKEPP -C utils clean
+  checkresult $? "Clean Utils" || exit 1
+  $MAKE $MAKEOPT $MAKEPP -C utils all
+  checkresult $? "Utils compilation" || exit 1
+  INSTALLTOOLS="&& make $MAKEPP -C utils install"
+fi
+#
+# IDE
+#
+if [ "$DOIDE" = 'YES' ]; then
+  $MAKE $MAKEOPT $MAKEPP -C ide clean
+  checkresult $? "Clean IDE" || exit 1
+  $MAKE $MAKEOPT $MAKEPP -C ide all
+  checkresult $? "IDE compilation" || exit 1
+  INSTALLIDE="&& make $MAKEPP -C ide install"
+fi
+#
+# If we got here, success !!
+#
+echo "All tasks completed succesfully !"
+if [ "$DOINSTALL" = 'YES' ]; then
+  if [ "$DOCYCLE" = "YES" ]; then
+    INSTALLCMD="make $MAKEPP -C compiler install && "
+  else
+    INSTALLCMD=""  
+  fi
+  INSTALLCMD="$INSTALLCMD make $MAKEPP -C rtl install && make $MAKEPP -C packages install";
+  INSTALLCMD="$INSTALLCMD $INSTALLFVISION $INSTALLTOOLS $INSTALLIDE"
+  if [ `id -u` = 0 ]; then
+    $INSTALLCMD
+  else
+    echo "About to install tools. Please enter the root password when prompted:"
+    su -c "$INSTALLCMD"
+  fi
+fi
+) | tee $LOGFILE 2>&1
