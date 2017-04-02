@@ -23,7 +23,7 @@ set myBINUTILS_PATH=%myBINUTILS%\%myVERSION%\%myTARGET%
 
 set PATH=%myBINUTILS_PATH%;%myFPC%\bin\%myTARGET%
 
-echo Ready to use MAKE distclean in any folder using FPC %myVERSION%.
+echo Ready to use BINUTILS tools with FPC %myVERSION%.
 
 :END
 
