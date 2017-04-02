@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 set myFPC_ver=%1
 set myLAZ_ver=%2
