@@ -3,10 +3,10 @@
 cd ..
 
 set myroot=%cd%
-set myFPC=%myroot%\compilers\2.6.5
+set myFPC=%myroot%\compilers\3.0.1
 set PATH=%myFPC%\bin\i386-win32
 
-cd mseide-msegui
+cd mse
 del /s /f /q *.ppu
 del /s /f /q *.o
 del /s /f /q *.a
