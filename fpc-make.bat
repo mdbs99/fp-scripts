@@ -14,7 +14,7 @@ set myOPTPLATFORM=%2
 set myOPTCROSS=%3
 
 rem === CONSTANTS ===
-set cFPC_STABLE_VER=3.0.3
+set cFPC_STABLE_VER=3.0.1
 
 set cPLATFORM_32=i386
 set cPLATFORM_64=x86
