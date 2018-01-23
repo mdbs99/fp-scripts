@@ -8,7 +8,7 @@ set myROOT=%cd%
 set myLAZVER=%1
 set myLOG=%2
 set myLAZPATH=%myROOT%\ide\lazarus\%myLAZVER%
-set myOPT=--pcp=%myLAZPATH%-config --lazarus-dir=%myLAZPATH%
+set myOPT=--pcp=%myLAZPATH%-pcp --lazarus-dir=%myLAZPATH%
 
 if [%myLOG%] equ [%cLOG%] (
   del %myLAZPATH%\debuglog.txt
