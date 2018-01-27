@@ -8,7 +8,7 @@ cd ..
 set myROOT=%cd%
 set myFPC=%myROOT%\compilers\%myFPC_ver%
 set myLAZ=%myROOT%\ide\lazarus\%myLAZ_ver%
-set myBINUTILS=%myroot%\binutils\%myFPC_ver%
+set myBINUTILS=%myROOT%\binutils\%myFPC_ver%
 set PATH=%myBINUTILS%\i386-win32;%myFPC%\bin\i386-win32
 
 cd %myLAZ%
