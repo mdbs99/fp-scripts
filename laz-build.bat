@@ -9,4 +9,4 @@ set myLAZ=%myROOT%\ide\lazarus\%myLAZ_ver%
 
 cd %myLAZ%
 
-lazbuild.exe --build-ide= --pcp=..\%myLAZ_ver%-config
+lazbuild.exe --build-ide= --pcp=..\%myLAZ_ver%-pcp
