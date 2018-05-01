@@ -1,26 +1,26 @@
 @echo off
 
-set cLOG=log
+set _LOG=log
 
 cd ..
 
-set myROOT=%cd%
-set myLAZVER=%1
-set myLOG=%2
-set myLAZPATH=%myROOT%\ide\lazarus\%myLAZVER%
-set myOPT=--pcp=%myLAZPATH%-pcp --lazarus-dir=%myLAZPATH%
+set root=%cd%
+set laz_ver=%1
+set log=%2
+set laz_path=%root%\ide\lazarus\%laz_ver%
+set opt=--pcp=%laz_path%-config --lazarus-dir=%laz_path%
 
-if [%myLOG%] equ [%cLOG%] (
-  del %myLAZPATH%\debuglog.txt
-  set myOPT=%myOPT% --debug-log=debuglog.txt
+if [%log%] equ [%_LOG%] (
+  del %laz_path%\debuglog.txt
+  set opt=%opt% --debug-log=debuglog.txt
 )
 
 
 cd \
 
 rem if /i %cd% equ W:\ (
-  cd %myLAZPATH%
-  start startlazarus %myOPT%
+  cd %laz_path%
+  start startlazarus %opt%
 rem ) else (
 rem   echo "invalid driver"
 rem   pause

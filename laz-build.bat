@@ -1,12 +1,12 @@
 @echo off
 
-set myLAZ_ver=%1
+set laz_ver=%1
 
 cd ..
 
-set myROOT=%cd%
-set myLAZ=%myROOT%\ide\lazarus\%myLAZ_ver%
+set root=%cd%
+set laz_path=%root%\ide\lazarus\%laz_ver%
 
-cd %myLAZ%
+cd %laz_path%
 
-lazbuild.exe --build-ide= --pcp=..\%myLAZ_ver%-pcp
+lazbuild.exe --build-ide= --pcp=..\%laz_ver%-config

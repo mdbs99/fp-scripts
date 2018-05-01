@@ -1,16 +1,16 @@
 @echo off
 
-set myFPC_ver=%1
-set myLAZ_ver=%2
+set fpc_ver=%1
+set laz_ver=%2
 
 cd ..
 
-set myROOT=%cd%
-set myFPC=%myROOT%\compilers\%myFPC_ver%
-set myLAZ=%myROOT%\ide\lazarus\%myLAZ_ver%
-set myBINUTILS=%myROOT%\binutils\%myFPC_ver%
-set PATH=%myBINUTILS%\i386-win32;%myFPC%\bin\i386-win32
+set root=%cd%
+set fpc_path=%root%\compilers\%fpc_ver%
+set laz_path=%root%\ide\lazarus\%laz_ver%
+set binutils_path=%root%\binutils\%fpc_ver%
+set PATH=%binutils_path%\i386-win32;%fpc_path%\bin\i386-win32
 
-cd %myLAZ%
+cd %laz_path%
 
 make clean all OPT="-glw2"

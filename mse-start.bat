@@ -1,11 +1,13 @@
 
 cd ..
 
-set myroot=%cd%
-set myFPC=%myroot%/compilers/2.6.5/
-set myBINUTILS=%myroot%/binutils/2.6.5/i386-win32/gdb.exe
-set PATH=%myFPC%\bin\i386-win32
+set fpc_ver=3.0.2
+
+set root=%cd%
+set fpc=%myroot%/compilers/%fpc_ver%/
+set binutils=%root%/binutils/%fpc_ver%/i386-win32/gdb.exe
+set PATH=%fpc%\bin\i386-win32
 
 cd ide\mse
 
-start mseide.exe --macrodef=FPCDIR,%myFPC%,FPCDIRLIB,{$FPCDIR}/bin/i386-win32/,COMPILER,${FPCDIR}/bin/i386-win32/ppc386.exe,DEBUGGER,%myBINUTILS%
+start mseide.exe --macrodef=FPCDIR,%fpc%,FPCDIRLIB,{$FPCDIR}/bin/i386-win32/,COMPILER,${FPCDIR}/bin/i386-win32/ppc386.exe,DEBUGGER,%binutils%

@@ -2,12 +2,12 @@
 
 cd ..
 
-set myroot=%cd%
-set myFPC=%myroot%\compilers\%1
-set mybinutils=%myroot%\binutils\%1
-set PATH=%mybinutils%\i386-win32;%myFPC%\bin\i386-win32
+set root=%cd%
+set fpc=%root%\compilers\%1
+set binutils=%root%\binutils\%1
+set PATH=%binutils%\i386-win32;%fpc%\bin\i386-win32
 
-cd %myroot%\compilers\fpcdocs
+cd %root%\compilers\fpcdocs
 
-make fcl.chk FPCSRCDIR=%myFPC%
-make rtl.chk FPCSRCDIR=%myFPC%
+make fcl.chk FPCSRCDIR=%fpc%
+make rtl.chk FPCSRCDIR=%fpc%
